@@ -18,8 +18,8 @@ function makeHtmlPlugin(plugins, entry) {
     Object.keys(entry).forEach((name) => {
         const htmlplugin = new HtmlWebpackPlugin({
             inject: true,
-            template: './template/index.html',
-            filename: `../html/${name}.html`,
+            template: path.resolve(__dirname, 'template/index.html'),
+            filename: `${name}.html`,
             chunks: [name],
             templateParameters: {
                 title: name,
@@ -36,7 +36,7 @@ makeHtmlPlugin(plugins, entry);
 module.exports = {
     entry,
     output: {
-        path: path.resolve(__dirname, "dist/js"),
+        path: path.resolve(__dirname, "dist"),
         filename: '[name].js',
     },
     resolve: {
@@ -67,12 +67,15 @@ module.exports = {
     },
     plugins: [
         ...plugins,
-        new webpack.HotModuleReplacementPlugin(),
     ],
     devServer: {
-        static: path.resolve(__dirname, './dist'),
+        static: {
+            directory: path.resolve(__dirname, 'dist'),
+        },
         hot: true,
+        watchFiles: [path.resolve(__dirname, 'dist/*')],
     },
     watch: false,
+    mode: 'development',
 };
   
